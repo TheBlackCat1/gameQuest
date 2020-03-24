@@ -6,7 +6,7 @@
 # Player movement
 
 import pygame as pg
-from pg.sprite import Sprite
+# from pg.sprite import Sprite
 import random
 from settings import *
 from sprites import *
