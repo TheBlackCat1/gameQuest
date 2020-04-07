@@ -28,6 +28,20 @@ class Game:
         self.plat1 = Platform(self, (WIDTH/2, HEIGHT - HEIGHT/8))
         self.plat2 = Platform(self, (WIDTH/4, HEIGHT - HEIGHT/4))
         self.platform = Platform(self, (WIDTH/2, HEIGHT))
+        platforms = []
+        platforms.append(self.plat1)
+        platforms.append(self.plat2)
+        platforms.append(self.platform)
+        for i in range(10):
+            i = Platform(self, (random.randint(1, WIDTH), random.randint(1, HEIGHT)))
+            go = True
+            for a in platforms:
+                if i.pos.x > a.pos.x - 200 and i.pos.x < a.pos.x + 200 or i.pos.y > HEIGHT - 100:
+                    if i.pos.y > a.pos.y - 40 and i.pos.y < a.pos.y + 40:
+                        go = False
+            if go:
+                self.all_sprites.add(i)
+                platforms.append(i)
         self.all_sprites.add(self.player)
         self.all_sprites.add(self.platform)
         self.all_sprites.add(self.plat1)

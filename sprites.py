@@ -108,5 +108,5 @@ class Bullet(pg.sprite.Sprite):
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.pos = vec(WIDTH / 2, HEIGHT / 2)
-    def update():
-        
+    def update(self):
+        self.pos.y += 4
