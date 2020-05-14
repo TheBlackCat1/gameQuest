@@ -23,6 +23,7 @@ class Game:
 
     def new(self):
         # start a new game
+        print("BRUH")
         self.all_sprites = pg.sprite.Group()
         self.player = Player(self)
         self.plat1 = Platform(self, (WIDTH/2, HEIGHT - HEIGHT/8))
