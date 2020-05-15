@@ -27,32 +27,57 @@ class Game:
         self.allSprites = pg.sprite.Group()
         self.player = Player(self)
         self.allSprites.add(self.player)
-        pass
+        self.floor = 0
 
-    def newLevel(self):
+    def newLevel(self, died):
         self.enemySprites = pg.sprite.Group()
-        self.enemy = Grunt(self)
-        self.enemySprites.add(self.enemy)
+        self.healthPacks = pg.sprite.Group()
+        for i in range(HEALTHPACK_NUMBER):
+            i = HealthPack(self)
+            self.healthPacks.add(i)
+        if died == False:
+            self.floor += 1
+        else:
+            self.floor -= 1
+        for i in range(self.floor):
+            i = Grunt(self)
+            self.enemySprites.add(i)
+    
+    # def highscore(self):
+    #     f = open("highscore.txt", "r")
+    #     return int(f.read())
+    
+    # def newHighscore(self):
+    #     f = open("highscore.txt", "w")
+    #     f.write(str(self.floor))
+    #     f.close()
 
-    def level(self):
+    def level(self, died):
         #start another level and loop for the level
-        self.newLevel()
-        while self.running and self.player.hp > 0:
+        self.newLevel(died)
+        while self.running and len(self.enemySprites) != 0:
             self.events()
             self.draw()
             self.update()
             self.clock.tick(FPS)
-        #return if the player died or not
+            # if self.floor > self.highscore():
+            #     self.newHighscore()
+            if self.player.hp <= 0:
+                break
+        else:
+            return False
         return True
 
     def play(self):
         #display messages befpre game start
         #start a new game
         self.new()
-        while True:
-            dead = self.level()
-            if dead:
+        dead = False
+        while self.running:
+            if dead and self.floor == 1:
                 break
+            dead = self.level(dead)
+            print(dead)
     
     def run(self):
         #run the game and is the master loop of the game (if stopped, the game is quit)
@@ -66,12 +91,19 @@ class Game:
         #update every sprite
         self.allSprites.update()
         self.enemySprites.update()
+        self.healthPacks.update()
+        self.player.bullets.update()
     
     def draw(self):
         #draw everything on the screen
         self.screen.fill(BLACK)
         self.allSprites.draw(self.screen)
         self.enemySprites.draw(self.screen)
+        self.healthPacks.draw(self.screen)
+        self.player.bullets.draw(self.screen)
+        statusMessage = "Health: " + str(self.player.hp) + " Floor: " + str(self.floor)
+        #print(statusMessage)
+        self.drawText(40, statusMessage, RED, WIDTH/2, HEIGHT/2)
         pg.display.flip()
     
     def drawText(self, size, text, color, posx, posy):
