@@ -85,6 +85,7 @@ class Player(pg.sprite.Sprite):
 #bullet sprite
 class Bullet(pg.sprite.Sprite):
     def __init__(self, player, mousePos):
+        #initialize all of the sprites values
         pg.sprite.Sprite.__init__(self)
         self.image = pg.Surface((5,5))
         self.image.fill(BLUE)
@@ -104,6 +105,7 @@ class Bullet(pg.sprite.Sprite):
         self.ticks = 0
     
     def setAcc(self):
+        #set the acceleration of the bullet towards the mouse
         self.acc = vec(0, 0)
         ratioX = self.mouse[0] - self.pos.x
         ratioY = self.mouse[1] - self.pos.y
@@ -117,10 +119,12 @@ class Bullet(pg.sprite.Sprite):
             self.acc.y = -BULLET_SPEED
     
     def checkBoundaries(self):
+        #check if it hits the border of the screen
         if self.pos.x > WIDTH or self.pos.x < 0 or self.pos.y > HEIGHT or self.pos.y < 0:
             self.player.bullets.remove(self)
     
     def countTick(self):
+        #delete itself if it has been alive for a certain time
         self.ticks += 1
         if self.ticks > 100:
             self.player.bullets.remove(self)

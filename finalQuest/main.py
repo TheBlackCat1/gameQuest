@@ -1,4 +1,9 @@
 #This file was created by: Carter Hively
+#Sources:
+#Mr. Cozort and his Intro to Computer Programming class
+#some tutorials for quick reference: https://pythonprogramming.net/pygame-python-3-part-1-intro/
+#pygame: https://www.pygame.org
+#pygame docs: https://www.pygame.org/docs/
 
 #impoting pygame as pg and random and all things from settings and sprites
 import pygame as pg
@@ -24,17 +29,21 @@ class Game:
                 self.running = False
     
     def new(self):
+        #Make an all sprites group for sprites that are not reset every round
         self.allSprites = pg.sprite.Group()
         self.player = Player(self)
         self.allSprites.add(self.player)
+        #reset floor value
         self.floor = 0
 
     def newLevel(self, died):
+        #create all sprites that reset every level/floor
         self.enemySprites = pg.sprite.Group()
         self.healthPacks = pg.sprite.Group()
         for i in range(HEALTHPACK_NUMBER):
             i = HealthPack(self)
             self.healthPacks.add(i)
+        #go up a floor every time
         if died == False:
             self.floor += 1
         else:
@@ -42,6 +51,8 @@ class Game:
         for i in range(self.floor):
             i = Grunt(self)
             self.enemySprites.add(i)
+    
+    #---UNDER CONSTRUCTION---
     
     # def highscore(self):
     #     f = open("highscore.txt", "r")
@@ -51,6 +62,8 @@ class Game:
     #     f = open("highscore.txt", "w")
     #     f.write(str(self.floor))
     #     f.close()
+
+    #-------------------------
 
     def level(self, died):
         #start another level and loop for the level
@@ -107,6 +120,7 @@ class Game:
         pg.display.flip()
     
     def drawText(self, size, text, color, posx, posy):
+        #method to draw a screen
         buttonText = pg.font.Font("freesansbold.ttf", size)
         textSurface = buttonText.render(text, True, color)
         textSurf, textRect = textSurface, textSurface.get_rect()
@@ -114,6 +128,7 @@ class Game:
         self.screen.blit(textSurf, textRect)
 
     def drawStartScreen(self):
+        #draw the screen with a green and a red button with the title bouncing up and down changing from rise to fall and to rise again
         self.screen.fill(BLACK)
         #self.startScreenSprites = pg.sprite.Group()
         pg.draw.rect(self.screen, GREEN, (WIDTH/4-30, HEIGHT-HEIGHT/4, 60, 30))
@@ -121,7 +136,7 @@ class Game:
         #pg.draw.rect(self.screen, ORANGE, (WIDTH/2-30, HEIGHT-HEIGHT/4, 60, 30))
         self.drawText(20, "PLAY", BLACK, WIDTH/4, HEIGHT-HEIGHT/4+15)
         self.drawText(20, "QUIT", BLACK, WIDTH-WIDTH/4, HEIGHT-HEIGHT/4+15)
-
+        #test if the mouse clicks in a certain area
         mouse = pg.mouse.get_pos()
         pressed = pg.mouse.get_pressed()
         if mouse[0] > WIDTH/4-30 and mouse[0] < WIDTH/4+30 and mouse[1] > HEIGHT-HEIGHT/4 and mouse[1] < HEIGHT-HEIGHT/4+30 and pressed[0] == 1:
@@ -135,11 +150,15 @@ class Game:
 
     
     def startScreen(self):
+
         #start screen loop
         self.titleHeight = 0
         while self.running:
+            #check events
             self.events()
+            #draw the startscreen
             play = self.drawStartScreen()
+            #change height of title
             if self.title == "Rise":
                 self.titleHeight += 2
                 if self.titleHeight > 250:
