@@ -29,12 +29,19 @@ class Game:
         self.allSprites.add(self.player)
         pass
 
+    def newLevel(self):
+        self.enemySprites = pg.sprite.Group()
+        self.enemy = Grunt(self)
+        self.enemySprites.add(self.enemy)
+
     def level(self):
         #start another level and loop for the level
+        self.newLevel()
         while self.running and self.player.hp > 0:
             self.events()
             self.draw()
             self.update()
+            self.clock.tick(FPS)
         #return if the player died or not
         return True
 
@@ -58,11 +65,13 @@ class Game:
     def update(self):
         #update every sprite
         self.allSprites.update()
+        self.enemySprites.update()
     
     def draw(self):
         #draw everything on the screen
         self.screen.fill(BLACK)
         self.allSprites.draw(self.screen)
+        self.enemySprites.draw(self.screen)
         pg.display.flip()
     
     def drawStartScreen(self):
